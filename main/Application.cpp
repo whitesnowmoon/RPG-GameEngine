@@ -1,6 +1,8 @@
-#include"application.h"
-#include"ControlTerminal.h"
+#include"Application.h"
+#include"Director.h"
 
+#include"stb_image.h"
+#include"Shader.h"
 Application::Application(/* args */)
 {
 }
@@ -29,7 +31,7 @@ int Application::run()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow*window  = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -46,27 +48,20 @@ int Application::run()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }    
-    //control window init
-        
-    ControlTerminal controlterminal(window);
+   
+    Director* director=new  Director(window);
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-        //control signal handle
-        controlterminal.doTasks();
 
-        // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
+        director->play();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
+    delete director;
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
